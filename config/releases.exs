@@ -4,12 +4,16 @@
 # remember to add this file to your .gitignore.
 import Config
 
-database_url =
-  System.get_env("DATABASE_URL") ||
+db_host =
+  System.get_env("DATABASE_HOST") ||
     raise """
-    environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
+    environment variable DATABASE_HOST is missing.
     """
+
+db_database = System.get_env("DATABASE_DB") || "hello_docker_dev"
+db_username = System.get_env("DATABASE_USER") || "postgres"
+db_password = System.get_env("DATABASE_PASSWORD") || "postgres"
+database_url = "ecto://#{db_username}:#{db_password}@#{db_host}/#{db_database}"
 
 config :hello_docker, HelloDocker.Repo,
   # ssl: true,
