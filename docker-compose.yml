@@ -1,32 +1,41 @@
 # File my_app/docker-compose.yml
-version: "3"
+version: "3.5"
+
 
 networks:
-  internal:
-    external: false
+  webnet:
+    driver: overlay
+    attachable: true # Needed in order to run custom commands in the container
 
 services:
   app:
-    image: hello_docker:0.1.0
-    build:
-      context: .
-    environment:
-      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
-      - DATABASE_DB=${DATABASE_DB}
-      - DATABASE_HOST=db
+    image: my_app:latest
     ports:
-      - 4000:4000
-    networks:
-      - internal
+      - "80:4000" # In our .env file above, we chose port 4000
+    env_file:
+      - config/docker.env
     depends_on:
       - db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
 
   db:
-    image: postgres:9.6
+    image: postgres:10-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
     volumes:
-      - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=${DATABASE_DB}
+      - "./volumes/postgres:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    env_file:
+      - config/docker.env
     networks:
-      - internal
+      - webnet

@@ -10,14 +10,14 @@ db_host =
     environment variable DATABASE_HOST is missing.
     """
 
-db_database = System.get_env("DATABASE_DB") || "hello_docker_dev"
+db_database = System.get_env("DATABASE_DB") || "postgres"
 db_username = System.get_env("DATABASE_USER") || "postgres"
 db_password = System.get_env("DATABASE_PASSWORD") || "postgres"
-database_url = "ecto://#{db_username}:#{db_password}@#{db_host}/#{db_database}"
+db_url = "ecto://#{db_username}:#{db_password}@#{db_host}/#{db_database}"
 
 config :hello_docker, HelloDocker.Repo,
   # ssl: true,
-  url: database_url,
+  url: db_url,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 secret_key_base =
@@ -28,8 +28,5 @@ secret_key_base =
     """
 
 config :hello_docker, HelloDockerWeb.Endpoint,
-  http: [
-    port: String.to_integer(System.get_env("PORT") || "4000"),
-    transport_options: [socket_opts: [:inet6]]
-  ],
+  http: [:inet6, port: 4000],
   secret_key_base: secret_key_base
