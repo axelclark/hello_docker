@@ -9,7 +9,7 @@ networks:
 
 services:
   app:
-    image: axelclark/my_app:latest
+    image: axelclark/hello_docker:0.2.0
     ports:
       - "80:4000" # In our .env file above, we chose port 4000
     env_file:
