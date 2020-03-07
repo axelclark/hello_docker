@@ -40,7 +40,7 @@ jobs:
     - name: Publish to DockerHub
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: axelclark/hello_docker:${GITHUB_SHA}
+        name: axelclark/hello_docker:${{ GITHUB_SHA }}
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
   build:
