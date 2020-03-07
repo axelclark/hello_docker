@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Mix Test
+    name: mix test
     services:
       db:
         env:
