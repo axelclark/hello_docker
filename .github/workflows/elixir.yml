@@ -65,4 +65,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: cat /etc/hello_docker/docker-compose.yml
+        script: cat ~/etc/hello_docker/docker-compose.yml
