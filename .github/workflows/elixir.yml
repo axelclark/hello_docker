@@ -35,6 +35,7 @@ jobs:
         run: mix test
   publish:
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - uses: actions/checkout@master
     - name: Publish to DockerHub
@@ -45,6 +46,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
   build:
     runs-on: ubuntu-latest
+    needs: [test, publish]
     steps:
     - uses: actions/checkout@v2
     - name: Copy file via scp
@@ -65,4 +67,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: cat ~/etc/hello_docker/docker-compose.yml
+        script: docker service update --image axelclark/hello_docker:${{ github.sha }} hello_docker
